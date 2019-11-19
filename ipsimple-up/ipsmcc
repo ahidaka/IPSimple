@@ -1,0 +1,19 @@
+#!/bin/sh
+
+gcc -D__KERNEL__ -I/usr/src/linux-2.4.20debug/include -Wall \
+ -Wstrict-prototypes -Wno-trigraphs -O2 -fno-strict-aliasing -fno-common \
+ -fomit-frame-pointer -pipe -mpreferred-stack-boundary=2 \
+ -march=i686 -DMODULE -DMODVERSIONS  -DDEBUG_IP_FIREWALL \
+ -include /usr/src/linux-2.4.20debug/include/linux/modversions.h \
+ -nostdinc -iwithprefix include -DKBUILD_BASENAME=ip_sm_compat  \
+ -c -o ip_sm_compat.o ip_sm_compat.c
+
+gcc -D__KERNEL__ -I/usr/src/linux-2.4.20debug/include -Wall \
+ -Wstrict-prototypes -Wno-trigraphs -O2 -fno-strict-aliasing -fno-common \
+ -fomit-frame-pointer -pipe -mpreferred-stack-boundary=2 \
+ -march=i686 -DMODULE -DMODVERSIONS  -DDEBUG_IP_FIREWALL \
+ -include /usr/src/linux-2.4.20debug/include/linux/modversions.h \
+ -nostdinc -iwithprefix include -DKBUILD_BASENAME=ipsimple_core  \
+ -c -o ipsimple_core.o ipsimple_core.c
+
+ld -m elf_i386 -r -o ipsimple.o ip_sm_compat.o ipsimple_core.o

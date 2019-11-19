@@ -1,0 +1,44 @@
+--- ipfwadm-2.3.0/ipfwadm.c.orig	Tue Jul 30 11:54:22 1996
++++ ipfwadm-2.3.0/ipfwadm.c	Thu Oct  9 14:12:54 1997
+@@ -103,12 +103,24 @@
+ #include <getopt.h>
+ #include <netdb.h>
+ #include <netinet/in.h>
++
++#if defined(__GLIBC__) && (__GLIBC__ >= 2)
++#include <netinet/ip.h>
++#include <netinet/tcp.h>
++#include <netinet/udp.h>
++#include <net/if.h>
++#include <netinet/ip_fw.h>
++
++typedef unsigned int __u32;
++#else
+ #include <linux/ip.h>
+ #include <linux/tcp.h>
+ #include <linux/udp.h>
+ #include <linux/icmp.h>
+ #include <linux/if.h>
+ #include <linux/ip_fw.h>
++#endif
++
+ #include <sys/param.h>
+ 
+ #ifndef	IP_FW_F_REDIR
+@@ -1708,9 +1720,16 @@
+ 	case IP_FW_F_TCP:
+ 		iph->protocol = IPPROTO_TCP;
+ 		tcph = &ipfwp.fwp_protoh.fwp_tcph;
++/* this doesn't seem necessary anymore */
++#if defined(__GLIBC__) && (__GLIBC__ >= 2) && 0
++		tcph->th_sport = htons(fw->fw_pts[0]);
++		tcph->th_dport = htons(fw->fw_pts[1]);
++		tcph->th_flags |= (fw->fw_flg & IP_FW_F_TCPSYN) ? TH_SYN : 0;
++#else
+ 		tcph->source = htons(fw->fw_pts[0]);
+ 		tcph->dest = htons(fw->fw_pts[1]);
+ 		tcph->syn = (fw->fw_flg & IP_FW_F_TCPSYN) ? 1 : 0;
++#endif
+ 		break;
+ 	case IP_FW_F_UDP:
+ 		iph->protocol = IPPROTO_UDP;

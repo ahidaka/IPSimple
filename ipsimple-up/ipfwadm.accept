@@ -1,0 +1,9 @@
+#!/bin/sh
+ipfwadm -I -f
+ipfwadm -I -p accept
+ipfwadm -I -a deny -P tcp -D 192.168.51.114/32 netbios-ns
+ipfwadm -I -a deny -P udp -D 192.168.51.114/32 netbios-ns
+ipfwadm -I -a deny -P tcp -D 192.168.51.114/32 telnet
+
+ipfwadm -I -l
+

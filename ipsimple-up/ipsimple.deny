@@ -1,0 +1,12 @@
+#!/bin/sh
+./ipsimple -I -f
+./ipsimple -I -p deny
+./ipsimple -I -a accept -W lo0
+./ipsimple -I -a accept -P tcp -D 192.168.51.114/32 -k
+./ipsimple -I -a accept -P tcp -D 192.168.51.114/32 ssh
+./ipsimple -I -a accept -P tcp -D 192.168.51.114/32 ftp
+./ipsimple -I -a accept -P tcp -S 0.0.0.0/0 smtp -D 192.168.51.114/32
+./ipsimple -I -a accept -P tcp -S 0.0.0.0/0 domain -D 192.168.51.114/32
+./ipsimple -I -a accept -P udp -S 0.0.0.0/0 domain -D 192.168.51.114/32
+./ipsimple -I -l
+

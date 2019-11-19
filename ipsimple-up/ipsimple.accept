@@ -1,0 +1,9 @@
+#!/bin/sh
+./ipsimple -I -f
+./ipsimple -I -p accept
+./ipsimple -I -a deny -P tcp -D 192.168.51.114/32 netbios-ns
+./ipsimple -I -a deny -P udp -D 192.168.51.114/32 netbios-ns
+./ipsimple -I -a deny -P tcp -D 192.168.51.114/32 telnet
+
+./ipsimple -I -l
+

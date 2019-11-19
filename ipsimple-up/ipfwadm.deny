@@ -1,0 +1,12 @@
+#!/bin/sh
+ipfwadm -I -f
+ipfwadm -I -p deny
+ipfwadm -I -a accept -W lo0
+ipfwadm -I -a accept -P tcp -D 192.168.51.114/32 -k
+ipfwadm -I -a accept -P tcp -D 192.168.51.114/32 ssh
+ipfwadm -I -a accept -P tcp -D 192.168.51.114/32 ftp
+ipfwadm -I -a accept -P tcp -S 0.0.0.0/0 smtp -D 192.168.51.114/32
+ipfwadm -I -a accept -P tcp -S 0.0.0.0/0 domain -D 192.168.51.114/32
+ipfwadm -I -a accept -P udp -S 0.0.0.0/0 domain -D 192.168.51.114/32
+ipfwadm -I -l
+
